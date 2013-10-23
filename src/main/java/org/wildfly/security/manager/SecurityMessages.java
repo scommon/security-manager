@@ -20,7 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.wildfly.security.manager._private;
+package org.wildfly.security.manager;
 
 import java.security.AccessControlException;
 import java.security.CodeSource;
@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
-public class SecurityMessages {
+class SecurityMessages {
     public static final SecurityMessages access = new SecurityMessages();
     private static final Logger log = Logger.getLogger(SecurityMessages.class.getName());
 

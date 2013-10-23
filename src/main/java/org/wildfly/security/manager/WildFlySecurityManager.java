@@ -50,7 +50,7 @@ import static java.lang.System.getenv;
 import static java.lang.System.setProperty;
 import static java.lang.Thread.currentThread;
 import static java.security.AccessController.doPrivileged;
-import static org.wildfly.security.manager._private.SecurityMessages.access;
+import static org.wildfly.security.manager.SecurityMessages.access;
 
 /**
  * The security manager.  This security manager implementation can be switched on and off on a per-thread basis,
