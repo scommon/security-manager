@@ -25,35 +25,48 @@ package org.wildfly.security.manager._private;
 import java.security.AccessControlException;
 import java.security.CodeSource;
 import java.security.Permission;
-import org.jboss.logging.Logger;
-import org.jboss.logging.annotations.LogMessage;
-import org.jboss.logging.annotations.Message;
-import org.jboss.logging.annotations.MessageLogger;
-import org.jboss.logging.annotations.Param;
-
-import static org.jboss.logging.Logger.Level.DEBUG;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
+ * Modified to remove JBoss dependencies.
+ *
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
-@MessageLogger(projectCode = "WFSM")
-public interface SecurityMessages {
-    SecurityMessages access = Logger.getMessageLogger(SecurityMessages.class, "org.wildfly.security.access");
+public class SecurityMessages {
+    public static final SecurityMessages access = new SecurityMessages();
+    private static final Logger log = Logger.getLogger(SecurityMessages.class.getName());
 
-    @LogMessage(level = DEBUG)
-    @Message(value = "Permission check failed (permission \"%s\" in code source \"%s\" of \"%s\", principals \"%s\")")
-    void accessCheckFailed(Permission permission, CodeSource codeSource, ClassLoader classLoader, String principals);
+    private SecurityMessages() {
+    }
 
-    @LogMessage(level = DEBUG)
-    @Message(value = "Permission check failed (permission \"%s\" in code source \"%s\" of \"%s\")")
-    void accessCheckFailed(Permission permission, CodeSource codeSource, ClassLoader classLoader);
+    private static void log(Level level, String msg, Object...params) {
+      log.log(Level.FINE, String.format(msg, params));
+    }
 
-    @Message(id = 1, value = "Permission check failed for %s")
-    AccessControlException accessControlException(@Param Permission permission, Permission permission_);
+    public void accessCheckFailed(Permission permission, CodeSource codeSource, ClassLoader classLoader, String principals) {
+      log(Level.FINER, "Permission check failed (permission \"%s\" in code source \"%s\" of \"%s\", principals \"%s\")", permission, codeSource, classLoader, principals);
+    }
 
-    @Message(id = 2, value = "Security manager may not be changed")
-    SecurityException secMgrChange();
+    public void accessCheckFailed(Permission permission, CodeSource codeSource, ClassLoader classLoader) {
+      log(Level.FINER, "Permission check failed (permission \"%s\" in code source \"%s\" of \"%s\")", permission, codeSource, classLoader);
+    }
 
-    @Message(id = 3, value = "Unknown security context type")
-    SecurityException unknownContext();
+    public AccessControlException accessControlException(Permission permission, Permission permission_) {
+      final String msg = String.format("Permission check failed for %s", permission_);
+      log(Level.WARNING, msg);
+      throw new AccessControlException(msg, permission_);
+    }
+
+    public SecurityException secMgrChange() {
+      final String msg = "Security manager may not be changed";
+      log(Level.WARNING, msg);
+      throw new SecurityException(msg);
+    }
+
+    public SecurityException unknownContext() {
+      final String msg = "Unknown security context type";
+      log(Level.WARNING, msg);
+      throw new SecurityException(msg);
+    }
 }
