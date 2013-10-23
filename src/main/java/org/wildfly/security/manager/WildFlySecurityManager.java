@@ -58,6 +58,7 @@ import static org.wildfly.security.manager._private.SecurityMessages.access;
  *
  * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
  */
+@SuppressWarnings("deprecation")
 public final class WildFlySecurityManager extends SecurityManager {
 
     private static final Permission SECURITY_MANAGER_PERMISSION = new RuntimePermission("setSecurityManager");
